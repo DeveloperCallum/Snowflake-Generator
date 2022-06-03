@@ -9,7 +9,6 @@ public final class SnowflakeGenerator {
     public SnowflakeGenerator(String processID) {
         this(processID, 5);
     }
-
     public SnowflakeGenerator(String processID, int processThreads) {
         this.processID = processID;
 
@@ -25,10 +24,25 @@ public final class SnowflakeGenerator {
 
         executorService = Executors.newFixedThreadPool(processThreads, new SnowflakeThreadFactory());
     }
-
     public long getSnowflake() throws ExecutionException, InterruptedException {
         Future<Long> future = executorService.submit(new SnowflakeRunnable(processID));
 
         return future.get();
+    }
+
+    public static long getTimestamp(long snowflake){
+        return Long.parseLong(Long.toBinaryString(snowflake).substring(0, 41), 2);
+    }
+
+    public static long getProcessID(long snowflake){
+        return Long.parseLong(Long.toBinaryString(snowflake).substring(41, 46), 2);
+    }
+
+    public static long getThreadID(long snowflake){
+        return Long.parseLong(Long.toBinaryString(snowflake).substring(46, 51), 2);
+    }
+
+    public static long getSequenceID(long snowflake){
+        return Long.parseLong(Long.toBinaryString(snowflake).substring(51, 63), 2);
     }
 }
