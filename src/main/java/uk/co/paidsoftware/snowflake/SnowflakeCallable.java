@@ -1,11 +1,11 @@
 package uk.co.paidsoftware.snowflake;
 
 import java.util.concurrent.Callable;
- final class SnowflakeRunnable implements Callable<Long> {
+ final class SnowflakeCallable implements Callable<Long> {
     private final String processID;
     public volatile long sequence = 0;
 
-    public SnowflakeRunnable(String processID) {
+    public SnowflakeCallable(String processID) {
         this.processID = processID;
     }
 

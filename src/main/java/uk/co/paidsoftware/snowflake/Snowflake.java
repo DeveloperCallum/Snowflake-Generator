@@ -2,14 +2,14 @@ package uk.co.paidsoftware.snowflake;
 
 import java.util.concurrent.*;
 
-public final class SnowflakeGenerator {
+public final class Snowflake {
     private final String processID;
     private final ExecutorService executorService;
 
-    public SnowflakeGenerator(String processID) {
+    public Snowflake(String processID) {
         this(processID, 5);
     }
-    public SnowflakeGenerator(String processID, int processThreads) {
+    public Snowflake(String processID, int processThreads) {
         this.processID = processID;
 
         if (processID.length() != 5){
@@ -25,7 +25,7 @@ public final class SnowflakeGenerator {
         executorService = Executors.newFixedThreadPool(processThreads, new SnowflakeThreadFactory());
     }
     public long getSnowflake() throws ExecutionException, InterruptedException {
-        Future<Long> future = executorService.submit(new SnowflakeRunnable(processID));
+        Future<Long> future = executorService.submit(new SnowflakeCallable(processID));
 
         return future.get();
     }
